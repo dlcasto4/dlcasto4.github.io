@@ -11,27 +11,21 @@
     <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
     <script src="/assets/text/js/setnavandfooter.js"></script>
     <style>
-        /* Scaling factor for better responsiveness */
         :root {
             --scale-factor: 1;
-            /* Default scale */
             --font-size: calc(16px * var(--scale-factor));
             --image-size: calc(80px * var(--scale-factor));
         }
-
-        /* Media query to adjust scale based on screen size */
         @media screen and (max-width: 800px) {
             :root {
                 --scale-factor: 0.9;
             }
         }
-
         @media screen and (max-width: 480px) {
             :root {
                 --scale-factor: 0.75;
             }
         }
-
         body {
             background: var(--background);
             margin: 0;
@@ -39,7 +33,6 @@
             color: var(--text);
             font-size: var(--font-size);
         }
-
         .wrap {
             height: 100vh;
             width: 100vw;
@@ -51,7 +44,6 @@
             flex-direction: column;
             text-align: center;
         }
-
         .scroll {
             width: 75%;
             height: calc(100% - 130px);
@@ -60,67 +52,43 @@
             border-left: 1px solid #ffffff66;
             border-right: 1px solid #ffffff66;
         }
-        
-         div {
+        .games-list {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 20px;
             padding: 1% 20px 20px 20px;
         }
-        
         .game {
-            height: 100px;
-            width: 100%;
+            width: 180px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             border-bottom: 1px dashed var(--text-dull);
+            padding-bottom: 16px;
+            background: none;
+            box-sizing: border-box;
         }
-
         .game img {
             height: var(--image-size);
             width: var(--image-size);
-            margin: 10px;
+            margin: 10px 0 4px 0;
             border-radius: 8px;
             box-shadow: 0 0 8px currentColor;
+            transition: box-shadow 0.2s, filter 0.2s;
+            cursor: pointer;
         }
-
+        .game img:hover {
+            box-shadow: 0 0 20px 5px var(--text-dull);
+            filter: brightness(1.2) contrast(1.1);
+        }
         .game p {
             margin: 0;
             font-size: 18px;
             font-weight: 400;
             text-shadow: 0 0 8px currentColor;
-            text-align: right;
+            text-align: center;
         }
-
-        .game button {
-            height: var(--button-size);
-            width: 80px;
-            background: var(--background-light);
-            color: var(--text);
-            border: none;
-            margin-right: 10px;
-            margin-left: auto;
-            text-shadow: 0 0 4px currentColor;
-            transition: text-shadow 0.2s ease-in-out;
-        }
-
-        .game button:hover {
-            cursor: pointer;
-            text-shadow: 0 0 15px currentColor;
-        }
-
-        .game button.disabled {
-            background: var(--dark);
-            color: var(--text-dull);
-        }
-
-        .game button.disabled:hover {
-            cursor: default;
-            background: var(--dark);
-            text-shadow: 0 0 4px currentColor;
-        }
-
         #searchbar {
             height: 30px;
             width: 60%;
@@ -132,23 +100,19 @@
             color: var(--text);
             font-family: "Inter";
         }
-
         #searchbar:focus {
             outline: none;
             box-shadow: 0 0 8px var(--text-dull);
         }
-
         @media screen and (max-width: 8in) {
             #wr {
                 font-size: 60px;
             }
         }
-
         @media screen and (max-width: 5in) {
             #wr {
                 font-size: 35px;
             }
-
             .wrc {
                 height: 300px;
             }
@@ -160,7 +124,6 @@
     <button id="smallnavbtn" onclick="toggleSideNav()"><i class="wicon wicon-bar-menu" id="snbtnsub"></i></button>
     <nav id="navm">
         <!-- js! -->
-
     </nav>
     <nav id="sidenav">
         <!-- js! -->
@@ -169,130 +132,107 @@
     <div class="wrap">
         <input placeholder="Search..." id="searchbar" type="text">
         <div class="scroll">
-            <div class="game" data-name="monkeymart">
-                <img src="https://dlcasto5.github.io/monkeymart/logo.png">
-                <p>monkeymart<br><span style="color: lime; font-size: 14px;"new</span>
-                </p><button onclick="launchGame('monkey mart', 'monkeymart')">Launch</button>
-            </div>
-            <div class="game" data-name="fluid simulation">
-                <img src="https://dlcasto5.github.io/fluid-simulation/logo.png">
-                <p>fluidsimulation<br><span style="color: lime; font-size: 14px;">newest</span>
-                </p><button onclick="launchGame('fluid simulation', 'fluid-simulation')">Launch</button>
-            </div>
-            <div class="game" data-name="weave silk">
-                <img src="https://dlcasto5.github.io/weavesilk/logo.png">
-                <p>weavesilk<br>
-                </p><button onclick="launchGame('weave silk', 'weavesilk')">Launch</button>
-            </div>
-            <div class="game" data-name="break lock">
-                <img src="https://dlcasto5.github.io/breaklock/logo.png">
-                <p>android pin</p>
-                <button onclick="launchGame('android pin', 'breaklock')">Launch</button>
-            </div>                
-            <div class="game" data-name="cell machine">
-                <img src="https://dlcasto5.github.io/game/cell-machine/logo.png">
-                <p>cell-machine</p>
-                <button onclick="launchGame('cell machine', 'game/cell-machine')">Launch</button>
-            </div>
-            <div class="game" data-name="slope">
-                <img src="https://dlcasto5.github.io/game/slope/logo.png">
-                <p>slope</p>
-                <button onclick="launchGame('slope', 'game/slope')">Launch</button>
-            </div>
-            <div class="game" data-name="doge miner">
-                <img src="https://dlcasto5.github.io/game/doge-miner/favicon.ico">
-                <p>doge miner</p>
-                <button onclick="launchGame('doge miner', 'game/doge-miner')">Launch</button>
-            </div>
-            <div class="game" data-name="retro bowl">
-                <img src="https://dlcasto5.github.io/game/retro-bowl/logo.png">
-                <p>retro bowl</p>
-                <button onclick="launchGame('retro bowl', 'game/retro-bowl')">Launch</button>
-            </div>
-            <div class="game" data-name="doom">
-                <img src="https://dlcasto5.github.io/game/doom/logo.png">
-                <p>doom</p>
-                <button onclick="launchGame('doom', 'game/doom')">Launch</button>
-            </div>
-            <div class="game" data-name="there is no game">
-                <img src="https://dlcasto5.github.io/game/there-is-no-game/logo.png">
-                <p>there is no game</p>
-                <button onclick="launchGame('there is no game', 'game/there-is-no-game')">Launch</button>
-            </div>
-            <div class="game" data-name="chrome dino">
-                <img src="https://dlcasto5.github.io/game/chrome-dino/logo.png">
-                <p>chrome dino<br></p>
-                <button onclick="launchGame('chrome dino', 'game/chrome-dino')">Launch</button>
-            </div>
-            <div class="game" data-name="mc">
-                <img src="/assets/image/game/mc.png">
-                <p>minecraft 1.8.8</p>
-                <button onclick="launchGame('mc', 'mc')">Launch</button>
-            </div>
-            <div class="game" data-name="clash of tanks">
-                <img src="https://th.bing.com/th?id=OIP.zgWY2nMDD_yHPigvh6JbDQHaHa&w=80&h=80&c=1&vt=10&bgcl=899312&r=0&o=6&pid=5.1">
-                <p>clash of tanks</p>
-                <button onclick="launchGame('clash of tanks', 'clashoftanks')">Launch</button>
-            </div>
-            <div class="game" data-name="run 3">
-                <img src="https://th.bing.com/th?id=OIP.Ct5QSUXUXiDL6VQ2iEeIVwAAAA&w=80&h=80&c=1&vt=10&bgcl=ea877f&r=0&o=6&pid=5.1">
-                <p>Run 3</p>
-                <button onclick="launchGame('run 3', 'run3')">Launch</button>
-            </div>
-            <div class="game" data-name="tiny fishing">
-                <img src="https://th.bing.com/th?id=OIP.HLJslfR0_lbmrAaR9x2VDgHaHa&w=80&h=80&c=1&vt=10&bgcl=74d664&r=0&o=6&pid=5.1">
-                <p>tiny fishing</p>
-                <button onclick="launchGame('tiny fishing', 'tinyfishing')">launch</button>
-            </div>
-            <div class="game" data-name="cookie clicker">
-                <img src="/assets/image/game/cookieclicker.png">
-                <p>cookieclicker</p>
-                <button onclick="launchGame('cookie clicker', 'cookieclicker')">Launch</button>
-            </div>
-            <div class="game" data-name="xx142b2.exe">
-                <img src="/assets/image/game/xx142-b2exe.png">
-                <p>xx142-b2exe</p>
-                <button onclick="launchGame('xx142b2.exe', 'xx142-b2exe')">Launch</button>
-            </div>
-            <div class="game" data-name="fnf">
-                <img src="/assets/image/game/funkin.png">
-                <p>funkin</p>
-                <button onclick="launchGame('fnf', 'funkin')">Launch</button>
-            </div>
-            <div class="game" data-name="idle light city">
-                <img src="/assets/image/game/idlelightcity.png">
-                <p>idle light city</p>
-                <button onclick="launchGame('idle light city', 'idlelightcity')">Launch</button>
-            </div>
-            <div class="game" data-name="fruit ninja">
-                <img src="https://th.bing.com/th?id=OIP.v2vBzMN4-oDhz3foT2QzDQHaHa&w=100&h=100&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2">
-                <p>fruit ninja</p>
-                <button onclick="launchGame('fruit ninja', 'fruitninja')">Launch</button>
-            </div>
-            <div class="game" data-name="drift boss">
-                <img src="/assets/image/game/driftboss.png">
-                <p>driftboss</p>
-                <button onclick="launchGame('drift boss', 'driftboss')">Launch</button>
-            </div>
-            <div class="game" data-name="particleclicker">
-                <img src="/assets/image/game/particleclicker.png">
-                <p>particle clicker</p>
-                <button onclick="launchGame('particle clicker', 'particleclicker')">Launch</button>
-            </div>
-            <div class="game" data-name="Snow Rider 3D">
-                <img src="/assets/image/game/snowrider3d.png">
-                <p>Snow Rider 3D</p>
-                <button onclick="launchGame('Snow Rider 3D', 'snowrider3d')">Launch</button>
-            </div>
-            <div class="game" data-name="Idle Breakout">
-                <img src="/assets/image/game/idlebreakout.png">
-                <p>Idle Breakout</p>
-                <button onclick="launchGame('Idle Breakout', 'idlebreakout')">Launch</button>
-            </div>
-            <div class="game" data-name="Bit Life">
-                <img src="/assets/image/game/bitlife.png">
-                <p>Bitlife</p>
-                <button onclick="launchGame('Bit life', 'bitlife')">Launch</button>
+            <div class="games-list">
+                <div class="game" data-name="monkeymart">
+                    <img src="/monkeymart/logo.png" alt="monkeymart" onclick="launchGame('monkey mart', 'monkeymart')">
+                    <p>monkeymart<br><span style="color: lime; font-size: 14px;">new</span></p>
+                </div>
+                <div class="game" data-name="fluid simulation">
+                    <img src="/fluid-simulation/logo.png" alt="fluid simulation" onclick="launchGame('fluid simulation', 'fluid-simulation')">
+                    <p>fluidsimulation</p>
+                </div>
+                <div class="game" data-name="weave silk">
+                    <img src="/weavesilk/logo.png" alt="weave silk" onclick="launchGame('weave silk', 'weavesilk')">
+                    <p>weavesilk<br></p>
+                </div>
+                <div class="game" data-name="break lock">
+                    <img src="/breaklock/logo.png" alt="android pin" onclick="launchGame('android pin', 'breaklock')">
+                    <p>android pin</p>
+                </div>
+                <div class="game" data-name="cell machine">
+                    <img src="/game/cell-machine/logo.png" alt="cell-machine" onclick="launchGame('cell machine', 'game/cell-machine')">
+                    <p>cell-machine</p>
+                </div>
+                <div class="game" data-name="slope">
+                    <img src="/game/slope/logo.png" alt="slope" onclick="launchGame('slope', 'game/slope')">
+                    <p>slope</p>
+                </div>
+                <div class="game" data-name="doge miner">
+                    <img src="/game/doge-miner/favicon.ico" alt="doge miner" onclick="launchGame('doge miner', 'game/doge-miner')">
+                    <p>doge miner</p>
+                </div>
+                <div class="game" data-name="retro bowl">
+                    <img src="/game/retro-bowl/logo.png" alt="retro bowl" onclick="launchGame('retro bowl', 'game/retro-bowl')">
+                    <p>retro bowl</p>
+                </div>
+                <div class="game" data-name="doom">
+                    <img src="/game/doom/logo.png" alt="doom" onclick="launchGame('doom', 'game/doom')">
+                    <p>doom</p>
+                </div>
+                <div class="game" data-name="there is no game">
+                    <img src="/game/there-is-no-game/logo.png" alt="there is no game" onclick="launchGame('there is no game', 'game/there-is-no-game')">
+                    <p>there is no game</p>
+                </div>
+                <div class="game" data-name="chrome dino">
+                    <img src="/game/chrome-dino/logo.png" alt="chrome dino" onclick="launchGame('chrome dino', 'game/chrome-dino')">
+                    <p>chrome dino<br></p>
+                </div>
+                <div class="game" data-name="mc">
+                    <img src="/assets/image/game/mc.png" alt="minecraft 1.8.8" onclick="launchGame('mc', 'mc')">
+                    <p>minecraft 1.8.8</p>
+                </div>
+                <div class="game" data-name="clash of tanks">
+                    <img src="https://th.bing.com/th?id=OIP.zgWY2nMDD_yHPigvh6JbDQHaHa&w=80&h=80&c=1&vt=10&bgcl=899312&r=0&o=6&pid=5.1" alt="clash of tanks" onclick="launchGame('clash of tanks', 'clashoftanks')">
+                    <p>clash of tanks</p>
+                </div>
+                <div class="game" data-name="run 3">
+                    <img src="https://th.bing.com/th?id=OIP.Ct5QSUXUXiDL6VQ2iEeIVwAAAA&w=80&h=80&c=1&vt=10&bgcl=ea877f&r=0&o=6&pid=5.1" alt="run 3" onclick="launchGame('run 3', 'run3')">
+                    <p>Run 3</p>
+                </div>
+                <div class="game" data-name="tiny fishing">
+                    <img src="https://th.bing.com/th?id=OIP.HLJslfR0_lbmrAaR9x2VDgHaHa&w=80&h=80&c=1&vt=10&bgcl=74d664&r=0&o=6&pid=5.1" alt="tiny fishing" onclick="launchGame('tiny fishing', 'tinyfishing')">
+                    <p>tiny fishing</p>
+                </div>
+                <div class="game" data-name="cookie clicker">
+                    <img src="/assets/image/game/cookieclicker.png" alt="cookieclicker" onclick="launchGame('cookie clicker', 'cookieclicker')">
+                    <p>cookieclicker</p>
+                </div>
+                <div class="game" data-name="xx142b2.exe">
+                    <img src="/assets/image/game/xx142-b2exe.png" alt="xx142-b2exe" onclick="launchGame('xx142b2.exe', 'xx142-b2exe')">
+                    <p>xx142-b2exe</p>
+                </div>
+                <div class="game" data-name="fnf">
+                    <img src="/assets/image/game/funkin.png" alt="funkin" onclick="launchGame('fnf', 'funkin')">
+                    <p>funkin</p>
+                </div>
+                <div class="game" data-name="idle light city">
+                    <img src="/assets/image/game/idlelightcity.png" alt="idle light city" onclick="launchGame('idle light city', 'idlelightcity')">
+                    <p>idle light city</p>
+                </div>
+                <div class="game" data-name="fruit ninja">
+                    <img src="https://th.bing.com/th?id=OIP.v2vBzMN4-oDhz3foT2QzDQHaHa&w=100&h=100&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2" alt="fruit ninja" onclick="launchGame('fruit ninja', 'fruitninja')">
+                    <p>fruit ninja</p>
+                </div>
+                <div class="game" data-name="drift boss">
+                    <img src="/assets/image/game/driftboss.png" alt="driftboss" onclick="launchGame('drift boss', 'driftboss')">
+                    <p>driftboss</p>
+                </div>
+                <div class="game" data-name="particleclicker">
+                    <img src="/assets/image/game/particleclicker.png" alt="particle clicker" onclick="launchGame('particle clicker', 'particleclicker')">
+                    <p>particle clicker</p>
+                </div>
+                <div class="game" data-name="Snow Rider 3D">
+                    <img src="/assets/image/game/snowrider3d.png" alt="Snow Rider 3D" onclick="launchGame('Snow Rider 3D', 'snowrider3d')">
+                    <p>Snow Rider 3D</p>
+                </div>
+                <div class="game" data-name="Idle Breakout">
+                    <img src="/assets/image/game/idlebreakout.png" alt="Idle Breakout" onclick="launchGame('Idle Breakout', 'idlebreakout')">
+                    <p>Idle Breakout</p>
+                </div>
+                <div class="game" data-name="Bit Life">
+                    <img src="/assets/image/game/bitlife.png" alt="Bitlife" onclick="launchGame('Bit life', 'bitlife')">
+                    <p>Bitlife</p>
+                </div>
             </div>
             <a href="https://docs.google.com/forms/d/e/1FAIpQLSdudDDIeRqwU1cvgQUMZs0lbkLxXz5l-zKuRc3Q1G0inxfRXQ/viewform?usp=sf_link" style="color: var(--text); font-size: 13px;">Game Request Form</a>
             <br><span style="color: var(--text); font-size: 13px;">Joke requests will not be tolerated. If Joke requests are made, your future requests will be ignored.</span>
@@ -320,16 +260,13 @@
             }
         });
 
-        // Improved error handling and dynamic scaling on small devices
         function launchGame(name, id) {
             // Open a new blank tab
             const newTab = window.open('about:blank', '_blank');
-
             if (!newTab) {
                 alert("Failed to open a new tab. Please check your browser's pop-up blocker settings.");
                 return;
             }
-
             const loadingScreen = `
                     <!DOCTYPE html>
                     <html>
@@ -351,12 +288,9 @@
                     </body>
                     </html>
                 `;
-
             newTab.document.open();
             newTab.document.write(loadingScreen);
             newTab.document.close();
-
-            // Redirect after a delay
             setTimeout(() => {
                 newTab.location.href = `/${id}`;
             }, 2000);
