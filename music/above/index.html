@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Above All</title>
+    <link rel="icon" href="/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/text/css/wicons.css">
+    <link rel="stylesheet" href="/assets/text/css/global.css">
+    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+    <script src="/assets/text/js/setnavandfooter.js"></script>
+    <style>
+        :root {
+            --scale-factor: 1;
+            --font-size: calc(16px * var(--scale-factor));
+            --image-size: calc(80px * var(--scale-factor));
+        }
+        @media screen and (max-width: 800px) {
+            :root {
+                --scale-factor: 0.9;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            :root {
+                --scale-factor: 0.75;
+            }
+        }
+        body {
+            background: var(--background);
+            margin: 0;
+            font-family: "Inter";
+            color: var(--text);
+            font-size: var(--font-size);
+        }
+
+        .player-wrap {
+            min-height: 100vh;
+            width: 100vw;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 90px 20px 110px;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 22px;
+            left: 24px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-dull, #8a8a93);
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: .02em;
+            transition: color .2s, text-shadow .2s;
+            z-index: 5;
+        }
+        .back-link:hover {
+            color: var(--text, #eaeaea);
+            text-shadow: 0 0 8px currentColor;
+        }
+
+        .player-card {
+            width: 100%;
+            max-width: 360px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 22px;
+            padding: 38px 28px 28px;
+            border: 1px solid #ffffff26;
+            border-radius: 16px;
+            background: var(--background-light, #16161c);
+        }
+
+        .art-frame {
+            position: relative;
+            width: 210px;
+            height: 210px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 0 8px currentColor;
+            transition: box-shadow .3s, filter .3s;
+        }
+        .player-card.playing .art-frame {
+            box-shadow: 0 0 26px 2px currentColor;
+            filter: brightness(1.06) contrast(1.05);
+        }
+
+        .art {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* beacon pulse over the lamp in the artwork */
+        .beacon {
+            position: absolute;
+            top: 34%;
+            left: 51%;
+            width: 46px;
+            height: 46px;
+            margin: -23px 0 0 -23px;
+            border-radius: 50%;
+            background: radial-gradient(circle, currentColor 0%, transparent 70%);
+            opacity: .3;
+            filter: blur(6px);
+            pointer-events: none;
+        }
+        .player-card.playing .beacon {
+            animation: beacon-pulse 2.4s ease-in-out infinite;
+        }
+        @keyframes beacon-pulse {
+            0%, 100% { transform: scale(1); opacity: .3; }
+            50%      { transform: scale(2); opacity: .8; }
+        }
+
+        /* VHS scanline / tracking glitch, echoes the artwork's own texture */
+        .scan {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(to bottom, currentColor 0px, currentColor 1px, transparent 1px, transparent 3px);
+            opacity: 0;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+        }
+        .player-card.playing .scan {
+            opacity: .16;
+            animation: scan-drift 6s linear infinite, scan-jitter 6.5s steps(1) infinite;
+        }
+        @keyframes scan-drift {
+            from { background-position-y: 0; }
+            to   { background-position-y: -300px; }
+        }
+        @keyframes scan-jitter {
+            0%, 96%, 100% { transform: translateX(0); }
+            97% { transform: translateX(2px); }
+            98% { transform: translateX(-2px); }
+            99% { transform: translateX(1px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .player-card.playing .beacon,
+            .player-card.playing .scan,
+            .player-card.playing .eq span {
+                animation: none !important;
+            }
+        }
+
+        .meta { text-align: center; }
+        .title {
+            margin: 0;
+            font-size: 23px;
+            font-weight: 600;
+            text-shadow: 0 0 8px currentColor;
+        }
+        .tagline {
+            margin: 12px 0 0;
+            min-height: 15px;
+            font-family: "Pixelify Sans", monospace;
+            font-size: 12px;
+            color: #1efc04;
+            text-shadow: 0 0 6px #1efc04aa;
+        }
+
+        audio { display: none; }
+
+        .transport {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .play-btn {
+            flex: none;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: 1px solid #ffffff33;
+            background: none;
+            color: var(--text, #eaeaea);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            transition: box-shadow .2s;
+        }
+        .play-btn:hover { box-shadow: 0 0 10px currentColor; }
+        .play-btn svg { width: 17px; height: 17px; fill: currentColor; }
+        #iconPlay { margin-left: 2px; }
+
+        .scrub {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .time {
+            flex: none;
+            width: 30px;
+            font-size: 11px;
+            font-variant-numeric: tabular-nums;
+            color: var(--text-dull, #8a8a93);
+        }
+        .time.end { text-align: right; }
+
+        .seek {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 4px;
+            border-radius: 2px;
+            background: linear-gradient(to right, currentColor calc(var(--p, 0) * 1%), #ffffff26 0);
+            outline: none;
+            cursor: pointer;
+        }
+        .seek::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--text, #eaeaea);
+            box-shadow: 0 0 6px currentColor;
+            margin-top: -4px;
+        }
+        .seek::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border: none;
+            border-radius: 50%;
+            background: var(--text, #eaeaea);
+            box-shadow: 0 0 6px currentColor;
+        }
+        .seek::-moz-range-track { height: 4px; border-radius: 2px; background: #ffffff26; }
+        .seek::-moz-range-progress { height: 4px; border-radius: 2px; background: currentColor; }
+
+        .eq {
+            flex: none;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            opacity: .55;
+        }
+        .eq span {
+            flex: 1;
+            background: currentColor;
+            height: 25%;
+            border-radius: 1px;
+        }
+        .player-card.playing .eq span { animation: bounce 900ms ease-in-out infinite; }
+        .eq span:nth-child(1) { animation-delay: 0s; }
+        .eq span:nth-child(2) { animation-delay: .15s; }
+        .eq span:nth-child(3) { animation-delay: .3s; }
+        .eq span:nth-child(4) { animation-delay: .45s; }
+        @keyframes bounce {
+            0%, 100% { height: 22%; }
+            50% { height: 100%; }
+        }
+
+        .secondary {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+        }
+        .volume {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+        .vol-icon { width: 15px; height: 15px; fill: var(--text-dull, #8a8a93); flex: none; }
+        .volume input {
+            width: 70px;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 3px;
+            border-radius: 2px;
+            background: #ffffff26;
+            outline: none;
+            cursor: pointer;
+        }
+        .volume input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-dull, #8a8a93);
+        }
+        .volume input::-moz-range-thumb {
+            width: 10px;
+            height: 10px;
+            border: none;
+            border-radius: 50%;
+            background: var(--text-dull, #8a8a93);
+        }
+
+        .download {
+            font-size: 12px;
+            white-space: nowrap;
+            color: var(--text-dull, #8a8a93);
+            text-decoration: none;
+            border-bottom: 1px dashed transparent;
+            transition: color .2s, border-color .2s;
+        }
+        .download:hover {
+            color: var(--text, #eaeaea);
+            border-color: currentColor;
+        }
+
+        @media screen and (max-width: 480px) {
+            .player-card { padding: 30px 20px 24px; gap: 18px; max-width: 300px; }
+            .art-frame { width: 168px; height: 168px; }
+            .title { font-size: 19px; }
+        }
+    </style>
+</head>
+
+<body>
+    <button id="smallnavbtn" onclick="toggleSideNav()"><i class="wicon wicon-bar-menu" id="snbtnsub"></i></button>
+    <nav id="navm">
+        <!-- js! -->
+    </nav>
+    <nav id="sidenav">
+        <!-- js! -->
+    </nav>
+
+    <main class="player-wrap">
+        <a class="back-link" href="javascript:history.back()">&larr; back</a>
+
+        <div class="player-card" id="playerCard">
+            <div class="art-frame" id="artFrame">
+                <img class="art" src="/music/above/above-all.jpeg" alt="Above All cover art">
+                <div class="beacon" aria-hidden="true"></div>
+                <div class="scan" aria-hidden="true"></div>
+            </div>
+
+            <div class="meta">
+                <h1 class="title">Above All</h1>
+                <p class="tagline" id="tagline"></p>
+            </div>
+
+            <audio id="audio" preload="metadata" src="/music/above/above-all.wav"></audio>
+
+            <div class="transport">
+                <button id="playBtn" class="play-btn" aria-label="Play">
+                    <svg id="iconPlay" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"></path></svg>
+                    <svg id="iconPause" viewBox="0 0 24 24" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"></path></svg>
+                </button>
+
+                <div class="scrub">
+                    <span class="time" id="curTime">0:00</span>
+                    <input type="range" id="seek" class="seek" min="0" max="100" value="0" step="0.1" aria-label="Seek">
+                    <span class="time end" id="durTime">0:00</span>
+                </div>
+
+                <div class="eq" id="eq" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+            </div>
+
+            <div class="secondary">
+                <div class="volume">
+                    <svg class="vol-icon" viewBox="0 0 24 24"><path d="M3 10v4h4l5 5V5L7 10H3z"></path></svg>
+                    <input type="range" id="volume" min="0" max="100" value="80" aria-label="Volume">
+                </div>
+                <a class="download" href="/music/above/above-all.wav" download>download wav</a>
+            </div>
+        </div>
+    </main>
+
+    <footer id="footer">
+        <!-- js! -->
+    </footer>
+
+    <script>
+        var STATUS = "MAJOR CHANGES";
+        var sidenav = document.getElementById("sidenav");
+        var snbtn = document.getElementById("smallnavbtn");
+        var snbtnsub = document.getElementById("snbtnsub");
+        sidenav.style.left = "-200px";
+
+        function toggleSideNav() {
+            if (sidenav.style.left == "-200px") {
+                sidenav.style.left = "0";
+                snbtnsub.classList.remove("wicon-bar-menu");
+                snbtnsub.classList.add("wicon-xmark");
+                snbtn.style.left = "140px";
+                document.addEventListener("click", function(event) {
+                    if (!sidenav.contains(event.target) && !snbtn.contains(event.target)) {
+                        sidenav.style.left = "-200px";
+                        snbtnsub.classList.add("wicon-bar-menu");
+                        snbtnsub.classList.remove("wicon-xmark");
+                        snbtn.style.left = "0";
+                        document.removeEventListener("click");
+                    }
+                });
+            } else {
+                sidenav.style.left = "-200px";
+                snbtnsub.classList.add("wicon-bar-menu");
+                snbtnsub.classList.remove("wicon-xmark");
+                snbtn.style.left = "0";
+                document.removeEventListener("click");
+            }
+        }
+        async function updateStatus(elem) {
+            var col;
+            if (STATUS == "RENNOVATION") {
+                col = "#ffd300";
+            } else if (STATUS == "STABLE") {
+                col = "#00b4d8";
+            } else if (STATUS == "MEWO") {
+                col = "#7600bc";
+            } else if (STATUS == "MAJOR CHANGES") {
+                col = "#1efc04";
+            } else if (STATUS == "BLOCKED") {
+                col = "#ef4060";
+            } else {
+                STATUS = "ERROR";
+                col = "#ff4444";
+            }
+            elem.innerHTML = "Status: <span style='color: " + col + "; text-shadow: 0px 0px 10px " + col + "'>" + STATUS + "</span>";
+        }
+
+        function cloakTab() {
+            if (localStorage.getItem("wcCloak")) {
+                var a = localStorage.getItem("wcCloak").split(", ");
+                document.head.title = a[1];
+                var favicon = document.querySelector("link[rel~='icon']");
+                if (!favicon) {
+                    favicon = document.createElement('link');
+                    favicon.rel = 'icon';
+                    document.head.appendChild(favicon);
+                }
+                favicon.href = a[2];
+            } else {
+                return;
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            var fy = document.getElementById("footerYear");
+            if (fy) fy.innerText = new Date().getFullYear();
+            var statusElem = document.getElementById("status");
+            if (statusElem) updateStatus(statusElem);
+            cloakTab();
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var audio = document.getElementById("audio");
+            var card = document.getElementById("playerCard");
+            var playBtn = document.getElementById("playBtn");
+            var iconPlay = document.getElementById("iconPlay");
+            var iconPause = document.getElementById("iconPause");
+            var seek = document.getElementById("seek");
+            var curTime = document.getElementById("curTime");
+            var durTime = document.getElementById("durTime");
+            var volume = document.getElementById("volume");
+            var tagline = document.getElementById("tagline");
+            var seeking = false;
+
+            function fmt(s) {
+                if (!isFinite(s) || s < 0) return "0:00";
+                var m = Math.floor(s / 60);
+                var sec = Math.floor(s % 60).toString().padStart(2, "0");
+                return m + ":" + sec;
+            }
+
+            audio.volume = 0.8;
+
+            audio.addEventListener("loadedmetadata", function() {
+                durTime.textContent = fmt(audio.duration);
+            });
+
+            audio.addEventListener("timeupdate", function() {
+                if (seeking) return;
+                var pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+                seek.value = pct;
+                seek.style.setProperty("--p", pct);
+                curTime.textContent = fmt(audio.currentTime);
+            });
+
+            audio.addEventListener("play", function() {
+                card.classList.add("playing");
+                iconPlay.style.display = "none";
+                iconPause.style.display = "";
+                playBtn.setAttribute("aria-label", "Pause");
+            });
+
+            function onStop() {
+                card.classList.remove("playing");
+                iconPlay.style.display = "";
+                iconPause.style.display = "none";
+                playBtn.setAttribute("aria-label", "Play");
+            }
+            audio.addEventListener("pause", onStop);
+            audio.addEventListener("ended", onStop);
+
+            audio.addEventListener("error", function() {
+                tagline.textContent = "audio file not found";
+                playBtn.style.opacity = "0.4";
+                playBtn.style.pointerEvents = "none";
+            });
+
+            playBtn.addEventListener("click", function() {
+                if (audio.paused) audio.play(); else audio.pause();
+            });
+
+            seek.addEventListener("input", function() {
+                seeking = true;
+                seek.style.setProperty("--p", seek.value);
+                if (audio.duration) curTime.textContent = fmt((seek.value / 100) * audio.duration);
+            });
+            seek.addEventListener("change", function() {
+                if (audio.duration) audio.currentTime = (seek.value / 100) * audio.duration;
+                seeking = false;
+            });
+
+            volume.addEventListener("input", function() {
+                audio.volume = volume.value / 100;
+            });
+
+            if (window.Typewriter) {
+                try {
+                    new Typewriter(tagline, { loop: true, delay: 40, deleteSpeed: 20 })
+                        .typeString("now playing: above all_")
+                        .pauseFor(2200)
+                        .deleteAll()
+                        .start();
+                } catch (e) {}
+            }
+        });
+    </script>
+</body>
+
+</html>
