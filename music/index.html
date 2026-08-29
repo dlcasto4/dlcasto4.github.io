@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>projects</title>
+    <link rel="icon" href="/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/text/css/wicons.css">
+    <link rel="stylesheet" href="/assets/text/css/global.css">
+    <script src="https://unpkg.com/typewriter-effect@latest/dist/core.js"></script>
+    <script src="/assets/text/js/setnavandfooter.js"></script>
+    <style>
+        :root {
+            --scale-factor: 1;
+            --font-size: calc(16px * var(--scale-factor));
+            --image-size: calc(80px * var(--scale-factor));
+        }
+        @media screen and (max-width: 800px) {
+            :root {
+                --scale-factor: 0.9;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            :root {
+                --scale-factor: 0.75;
+            }
+        }
+        body {
+            background: var(--background);
+            margin: 0;
+            font-family: "Inter";
+            color: var(--text);
+            font-size: var(--font-size);
+        }
+        .wrap {
+            height: 100vh;
+            width: 100vw;
+            background: var(--background);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-direction: column;
+            text-align: center;
+        }
+        .scroll {
+            width: 75%;
+            height: calc(100% - 130px);
+            overflow-y: scroll;
+            overflow-x: hidden;
+            border-left: 1px solid #ffffff66;
+            border-right: 1px solid #ffffff66;
+        }
+        .games-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 1% 20px 20px 20px;
+        }
+        .game {
+            width: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border-bottom: 1px dashed var(--text-dull);
+            padding-bottom: 16px;
+            background: none;
+            box-sizing: border-box;
+        }
+        .game img {
+            height: var(--image-size);
+            width: var(--image-size);
+            margin: 10px 0 4px 0;
+            border-radius: 8px;
+            box-shadow: 0 0 8px currentColor;
+            transition: box-shadow 0.2s, filter 0.2s;
+            cursor: pointer;
+        }
+        .game img:hover {
+            box-shadow: 0 0 20px 5px var(--text-dull);
+            filter: brightness(1.2) contrast(1.1);
+        }
+        .game p {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 400;
+            text-shadow: 0 0 8px currentColor;
+            text-align: center;
+        }
+        #searchbar {
+            height: 30px;
+            width: 60%;
+            padding: 0 8px;
+            margin-bottom: 10px;
+            background: none;
+            border: 2px solid var(--background-light);
+            border-radius: 8px;
+            color: var(--text);
+            font-family: "Inter";
+        }
+        #searchbar:focus {
+            outline: none;
+            box-shadow: 0 0 8px var(--text-dull);
+        }
+        @media screen and (max-width: 8in) {
+            #wr {
+                font-size: 60px;
+            }
+        }
+        @media screen and (max-width: 5in) {
+            #wr {
+                font-size: 35px;
+            }
+            .wrc {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button id="smallnavbtn" onclick="toggleSideNav()"><i class="wicon wicon-bar-menu" id="snbtnsub"></i></button>
+    <nav id="navm">
+        <!-- js! -->
+    </nav>
+    <nav id="sidenav">
+        <!-- js! -->
+    </nav>
+
+    <div class="wrap">
+        <input placeholder="Search..." id="searchbar" type="text">
+        <div class="scroll">
+            <div class="games-list">
+                <div class="game" data-name=" Smoke">
+                    <img src="/music/Smoke-Signals.jpeg " alt="smoke" onclick="launchGame(' Smoke', '/music/Smoke')">
+                    <p> Smoke</p>
+                </div>
+                <div class="game" data-name="above-all">
+                    <img src="/music/above-all.jpeg" alt="above-all" onclick="launchGame('above-all', '/music/above-all')">
+                    <p>above-all</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer id="footer">
+        <!-- js! -->
+    </footer>
+
+    <script>
+        const searchbar = document.getElementById('searchbar');
+        const games = document.getElementsByClassName('game');
+
+        searchbar.addEventListener('input', (event) => {
+            const query = event.target.value.toLowerCase();
+
+            for (const game of games) {
+                const name = game.getAttribute('data-name').toLowerCase();
+                if (name.includes(query)) {
+                    game.style.display = 'flex';
+                } else {
+                    game.style.display = 'none';
+                }
+            }
+        });
+
+        function launchGame(name, id) {
+            // Open a new blank tab
+            const newTab = window.open('about:blank', '_blank');
+            if (!newTab) {
+                alert("Failed to open a new tab. Please check your browser's pop-up blocker settings.");
+                return;
+            }
+            const loadingScreen = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head>
+                        <title>Loading ${name}</title>
+                        <style>
+                            body {
+                                background: #101010;
+                                color: #00ff00;
+                                font-family: 'Pixelify Sans', sans-serif;
+                                text-align: center;
+                                margin-top: 20vh;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Loading ${name}...</h1>
+                        <p>Please wait while we launch the game.</p>
+                    </body>
+                    </html>
+                `;
+            newTab.document.open();
+            newTab.document.write(loadingScreen);
+            newTab.document.close();
+            setTimeout(() => {
+                newTab.location.href = `/${id}`;
+            }, 2000);
+        }
+    </script>
+    <script>
+        var STATUS = "MAJOR CHANGES";
+        var sidenav = document.getElementById("sidenav");
+        var snbtn = document.getElementById("smallnavbtn");
+        var snbtnsub = document.getElementById("snbtnsub");
+        sidenav.style.left = "-200px";
+
+        function toggleSideNav() {
+            if (sidenav.style.left == "-200px") {
+                sidenav.style.left = "0";
+                snbtnsub.classList.remove("wicon-bar-menu");
+                snbtnsub.classList.add("wicon-xmark");
+                snbtn.style.left = "140px";
+                document.addEventListener("click", function(event) {
+                    if (!sidenav.contains(event.target) && !snbtn.contains(event.target)) {
+                        sidenav.style.left = "-200px";
+                        snbtnsub.classList.add("wicon-bar-menu");
+                        snbtnsub.classList.remove("wicon-xmark");
+                        snbtn.style.left = "0";
+                        document.removeEventListener("click");
+                    }
+                });
+            } else {
+                sidenav.style.left = "-200px";
+                snbtnsub.classList.add("wicon-bar-menu");
+                snbtnsub.classList.remove("wicon-xmark");
+                snbtn.style.left = "0";
+                document.removeEventListener("click");
+            }
+        }
+        async function updateStatus(elem) {
+            var col;
+            if (STATUS == "RENNOVATION") {
+                col = "#ffd300";
+            } else if (STATUS == "STABLE") {
+                col = "#00b4d8";
+            } else if (STATUS == "MEWO") {
+                col = "#7600bc";
+            } else if (STATUS == "MAJOR CHANGES") {
+                col = "#1efc04";
+            } else if (STATUS == "BLOCKED") {
+                col = "#ef4060";
+            } else {
+                STATUS = "ERROR";
+                col = "#ff4444";
+            }
+            elem.innerHTML = "Status: <span style='color: " + col + "; text-shadow: 0px 0px 10px " + col + "'>" + STATUS + "</span>";
+        }
+
+        function cloakTab() {
+            if (localStorage.getItem("wcCloak")) {
+                var a = localStorage.getItem("wcCloak").split(", ");
+                document.head.title = a[1];
+                var favicon = document.querySelector("link[rel~='icon']");
+                if (!favicon) {
+                    favicon = document.createElement('link');
+                    favicon.rel = 'icon';
+                    document.head.appendChild(favicon);
+                }
+                favicon.href = a[2];
+            } else {
+                return;
+            }
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            var fy = document.getElementById("footerYear");
+            if (fy) fy.innerText = new Date().getFullYear();
+            var statusElem = document.getElementById("status");
+            if (statusElem) updateStatus(statusElem);
+            cloakTab();
+        });
+    </script>
+</body>
+
+</html>
